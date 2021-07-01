@@ -2,7 +2,6 @@
 #define OBJECT
 
 #include <bits/stdc++.h>
-#include "1605002_Vector3D.hpp"
 using namespace std;
 
 class Object

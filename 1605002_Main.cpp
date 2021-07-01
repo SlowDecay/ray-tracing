@@ -1,13 +1,19 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include <GL/glut.h>
 #include <windows.h>
 
+#include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
 #include "1605002_Sphere.hpp"
-#include "1605002_constants.hpp"
+#include "1605002_Triangle.hpp"
+#include "1605002_Constants.hpp"
+#include "1605002_Light.hpp"
+#include "1605002_Floor.hpp"
 
 using namespace std;
 
+vector<Object*> objects;
+vector<Light*> lights;
 
 // Rotate fst and scn vectors around base vector by "kon" angles counter-clockwise
 // All three vectors are unit vectors and mutually perpendicular 
@@ -145,12 +151,7 @@ void display(){
 
 	drawAxes();
 
-	Vector3D center(0, 0, 50);
-	double col[] = {255, 0, 0};
-	Sphere s(center, 40);
-	s.setColor(col);
-	s.draw();
-
+	for(Object* o: objects) o->draw();
 
 	//ADD this line in the end --- if you use double buffer (i.e. GL_DOUBLE)
 	glutSwapBuffers();
@@ -192,6 +193,12 @@ void init(){
 	//far distance
 }
 
+void loadData()
+{
+	Floor* floor = new Floor(500, 20);
+	objects.push_back(floor);
+}
+
 int main(int argc, char **argv){
 	glutInit(&argc,argv);
 	glutInitWindowSize(500, 500);
@@ -201,6 +208,8 @@ int main(int argc, char **argv){
 	glutCreateWindow("Ray Tracing");
 
 	init();
+
+	loadData(); // loading data from input
 
 	glEnable(GL_DEPTH_TEST);	//enable Depth Testing
 
