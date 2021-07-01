@@ -1,3 +1,3 @@
-g++ -o app.exe practice.cpp -lglut -lglu32 -lopengl32
+g++ -o app.exe 1605002_Main.cpp -lglut -lglu32 -lopengl32
 ./app.exe
 Remove-Item -Path app.exe

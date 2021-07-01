@@ -4,8 +4,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Vector3D
+class Vector3D
 {
+public:
     double coords[3];
 
     Vector3D()
@@ -17,6 +18,10 @@ struct Vector3D
     {
         coords[0] = x, coords[1] = y, coords[2] = z;
     }
+
+    double x() const { return coords[0]; }
+    double y() const { return coords[1]; }
+    double z() const { return coords[2]; }
 
     Vector3D operator+(const Vector3D &rhs) const
     {
@@ -78,7 +83,7 @@ struct Vector3D
         return Vector3D(tmp[0], tmp[1], tmp[2]);
     }
 
-    Vector3D& normalize()
+    Vector3D &normalize()
     {
         double d = 0;
         for (int i = 0; i < 3; i++)
@@ -93,6 +98,10 @@ struct Vector3D
 
         return *this;
     }
+
+    friend Vector3D operator*(double, const Vector3D &);
+    friend ostream &operator<<(ostream &, const Vector3D &);
+    friend istream &operator>>(istream &, Vector3D &);
 };
 
 Vector3D operator*(double d, const Vector3D &rhs)

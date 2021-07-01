@@ -13,6 +13,9 @@
         "streambuf": "cpp",
         "regex": "cpp",
         "tuple": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "bitset": "cpp",
+        "forward_list": "cpp",
+        "fstream": "cpp"
     }
 }

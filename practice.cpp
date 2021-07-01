@@ -64,7 +64,7 @@ void ghurao(const Vector3D& base, Vector3D& fst, Vector3D& scn, double kon)
 }
 
 // Global Variables declaration
-Vector3D pos, up, daan, look; // Camera vectors
+Vector3D eye, up, daan, look; // Camera vectors
 double anglez, anglex1, anglex2, angley; // Gun rotation vectors: anglex1 is the whole rotation and anglex2 is the gun tube rotation
 Vector3D root, diik; // root: intersection point of big and small spheres, diik: unit vector along gun tube
 Vector3D cheds[M]; // Bullets in board
@@ -277,24 +277,24 @@ void keyboardListener(unsigned char key, int x,int y){
 void specialKeyListener(int key, int x,int y){
 	switch(key){
 		case GLUT_KEY_DOWN:		//down arrow key
-            pos -= look*TD;
+            eye -= look*TD;
 			break;
 		case GLUT_KEY_UP:		// up arrow key
-            pos += look*TD;
+            eye += look*TD;
 			break;
 
 		case GLUT_KEY_RIGHT:
-            pos += daan*TD;
+            eye += daan*TD;
 			break;
 		case GLUT_KEY_LEFT:
-            pos -= daan*TD;
+            eye -= daan*TD;
 			break;
 
 		case GLUT_KEY_PAGE_UP:
-            pos += up*TD;
+            eye += up*TD;
 			break;
 		case GLUT_KEY_PAGE_DOWN:
-            pos -= up*TD;
+            eye -= up*TD;
 			break;
 
 		default:
@@ -358,8 +358,8 @@ void display(){
 	//3. Which direction is the camera's UP direction?
 
 	//gluLookAt(100,100,100,	0,0,0,	0,0,1);
-    Vector3D reff(pos+look);
-	gluLookAt(pos.x,pos.y,pos.z,    reff.x,reff.y,reff.z,    up.x,up.y,up.z);
+    Vector3D reff(eye+look);
+	gluLookAt(eye.x,eye.y,eye.z,    reff.x,reff.y,reff.z,    up.x,up.y,up.z);
 	//gluLookAt(0,0,200,	0,0,0,	0,1,0);
 
 
@@ -402,7 +402,7 @@ void init(){
 	//codes for initialization
 
     //Initializing pos, up, daan and look
-    pos = Vector3D(100, 100, 0);
+    eye = Vector3D(100, 100, 0);
     up = Vector3D(0, 0, 1);
     daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
     look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
