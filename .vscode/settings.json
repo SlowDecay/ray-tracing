@@ -12,6 +12,7 @@
         "ostream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "iosfwd": "cpp"
     }
 }
