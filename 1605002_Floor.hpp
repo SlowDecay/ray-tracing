@@ -20,7 +20,6 @@ private:
     double floorWidth, tileWidth;
 
 public:
-    Floor() {}
     Floor(double floorWidth, double tileWidth)
     {
         bottomLeft = Vector3D(-floorWidth / 2, -floorWidth / 2, 0);

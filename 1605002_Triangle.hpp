@@ -6,15 +6,15 @@
 #include <windows.h>
 
 #include "1605002_Object.hpp"
+#include "1605002_Vector3D.hpp"
 
 using namespace std;
 
 struct Triangle : public Object
 {
-private:
+public:
     Vector3D corners[3];
 
-public:
     Triangle() {}
     Triangle(Vector3D corners[])
     {
@@ -32,6 +32,18 @@ public:
         }
         glEnd();
     }
+
+    friend istream& operator>>(istream&, Triangle&);
 };
+
+istream& operator>>(istream& din, Triangle& t)
+{
+    for(int i = 0; i < 3; i++) din >> t.corners[i];
+    for(int i = 0; i < 3; i++) din >> t.color[i];
+    for(int i = 0; i < 4; i++) din >> t.coEfficients[i];
+    din >> t.shine;
+
+    return din;
+}
 
 #endif

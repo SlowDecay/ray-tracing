@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include "1605002_Object.hpp"
+#include "1605002_Vector3D.hpp"
 #include "1605002_Constants.hpp"
 
 using namespace std;
@@ -14,9 +15,9 @@ Vector3D spherePoints[SPHERE_STACKS + 10][SPHERE_SLICES + 10];
 
 class Sphere : public Object
 {
-private:
+public:
     Vector3D center;
-    double radius;
+    double radius;  
 
     void drawRing()
     {
@@ -57,19 +58,30 @@ private:
         drawRing();
     }
 
-public:
     Sphere() {}
     Sphere(Vector3D center, double radius) : center(center), radius(radius) {}
 
     virtual void draw()
     {
         glPushMatrix();
-        glTranslatef(center.coords[0], center.coords[1], center.coords[2]);
-        glColor3f(color[0], color[1], color[2]);
-        drawHalfSphere(1);
-        drawHalfSphere(-1);
+            glTranslatef(center.coords[0], center.coords[1], center.coords[2]);
+            glColor3f(color[0], color[1], color[2]);
+            drawHalfSphere(1);
+            drawHalfSphere(-1);
         glPopMatrix();
     }
+
+    friend istream& operator>>(istream&, Sphere&);
 };
+
+istream& operator>>(istream& din, Sphere& s)
+{
+    din >> s.center >> s.radius;
+    for(int i = 0; i < 3; i++) din >> s.color[i];
+    for(int i = 0; i < 4; i++) din >> s.coEfficients[i];
+    din >> s.shine;
+
+    return din;
+}
 
 #endif

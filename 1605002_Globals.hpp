@@ -8,5 +8,8 @@ using namespace std;
 
 extern vector<Object> objects;
 extern vector<Light> lights;
+extern int recursionLevel;
+extern int windowHeight;
+extern int windowWidth;
 
 #endif

@@ -6,6 +6,7 @@
 #include "1605002_Vector3D.hpp"
 #include "1605002_Sphere.hpp"
 #include "1605002_Triangle.hpp"
+#include "1605002_General.hpp"
 #include "1605002_Constants.hpp"
 #include "1605002_Light.hpp"
 #include "1605002_Floor.hpp"
@@ -14,6 +15,9 @@ using namespace std;
 
 vector<Object*> objects;
 vector<Light*> lights;
+int recursionLevel;
+int windowHeight;
+int windowWidth;
 
 // Rotate fst and scn vectors around base vector by "kon" angles counter-clockwise
 // All three vectors are unit vectors and mutually perpendicular 
@@ -152,6 +156,7 @@ void display(){
 	drawAxes();
 
 	for(Object* o: objects) o->draw();
+	for(Light* l: lights) l->draw();
 
 	//ADD this line in the end --- if you use double buffer (i.e. GL_DOUBLE)
 	glutSwapBuffers();
@@ -195,7 +200,54 @@ void init(){
 
 void loadData()
 {
-	Floor* floor = new Floor(500, 20);
+	ifstream fin("scene.txt");
+
+	fin >> recursionLevel >> windowHeight;
+	windowWidth = windowHeight;
+
+	int n;
+	fin >> n;
+
+	for(int i = 0; i < n; i++)
+	{
+		string name;
+		fin >> name;
+
+		Object* o;
+
+		if(name == "sphere")
+		{
+			o = new Sphere();
+			fin >> *((Sphere*)o);
+		}
+		else if(name == "triangle")
+		{
+			o = new Triangle();
+			fin >> *((Triangle*)o);
+		}
+		else if(name == "general")
+		{
+			o = new General();
+			fin >> *((General*)o);
+		}
+
+		objects.push_back(o);
+	}
+
+	int m;
+	fin >> m;
+
+	cout << m << endl;
+
+	for(int i = 0; i < m; i++)
+	{
+		Light *l = new Light();
+		fin >> *l;
+
+		lights.push_back(l);
+	}
+
+	Object* floor = new Floor(500, 20);
 	objects.push_back(floor);
 }
 
