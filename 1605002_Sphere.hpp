@@ -11,6 +11,7 @@ class Sphere;
 #include "1605002_Vector3D.hpp"
 #include "1605002_Constants.hpp"
 #include "1605002_Globals.hpp"
+#include "1605002_Utils.hpp"
 
 using namespace std;
 
@@ -72,6 +73,22 @@ public:
             drawHalfSphere(1);
             drawHalfSphere(-1);
         glPopMatrix();
+    }
+
+    virtual double getChed(Ray ray)
+    {
+        ray.start -= center;
+        
+        double a = 1;
+        double b = 2*ray.start.dot(ray.dir);
+        double c = ray.start.dot(ray.start)-radius*radius;
+
+        return getSol(a, b, c);
+    }
+
+    virtual Ray getNormal(Vector3D point)
+    {
+        return Ray(point, point-center);
     }
 
     friend istream& operator>>(istream&, Sphere&);

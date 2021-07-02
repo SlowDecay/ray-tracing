@@ -4,6 +4,8 @@
 class Vector3D;
 
 #include <bits/stdc++.h>
+#include "1605002_Constants.hpp"
+
 using namespace std;
 
 class Vector3D
@@ -65,6 +67,17 @@ public:
         return Vector3D(tmp[0], tmp[1], tmp[2]);
     }
 
+    Vector3D operator/(double d) const
+    {
+        if(fabs(d) < EPS) return Vector3D(INF, INF, INF);
+
+        double tmp[3];
+        for (int i = 0; i < 3; i++)
+            tmp[i] = coords[i] / d;
+
+        return Vector3D(tmp[0], tmp[1], tmp[2]);
+    }
+
     double dot(const Vector3D &rhs) const
     {
         double ans = 0;
@@ -117,7 +130,7 @@ Vector3D operator*(double d, const Vector3D &rhs)
 
 ostream &operator<<(ostream &dout, const Vector3D &rhs)
 {
-    dout << rhs.coords[0] << " " << rhs.coords[1] << " " << rhs.coords[2];
+    dout << "(" << rhs.coords[0] << ", " << rhs.coords[1] << ", " << rhs.coords[2] << ")";
     return dout;
 }
 

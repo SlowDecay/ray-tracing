@@ -12,6 +12,7 @@
 #include "1605002_Light.hpp"
 #include "1605002_Floor.hpp"
 #include "1605002_Bitmap_Image.hpp"
+#include "1605002_Ray.hpp"
 
 using namespace std;
 
@@ -20,8 +21,12 @@ Vector3D eye, up, daan, look; // Camera vectors
 vector<Object*> objects;
 vector<Light*> lights;
 int recursionLevel;
-int windowHeight;
-int windowWidth;
+int windowHeight = 500;
+int windowWidth = 500;
+int imageHeight;
+int imageWidth;
+double viewAngle = 80;
+double aspect = 1;
 
 // Rotate fst and scn vectors around base vector by "kon" angles counter-clockwise
 // All three vectors are unit vectors and mutually perpendicular 
@@ -34,15 +39,60 @@ void ghurao(const Vector3D& base, Vector3D& fst, Vector3D& scn, double kon)
     scn = ascn*cos(kon)+afst*sin(kon);
 }
 
+double radian(double angle) { return angle*PI/180; }
+
 void capture()
 {
-	bitmap_image image(windowWidth,windowHeight);
+	// Initializing bitmap image
+	bitmap_image image(imageWidth,imageHeight);
 
-	for(int i=0;i<windowWidth;i++){
-        for(int j=0;j<windowHeight;j++){
+	for(int i=0;i<imageWidth;i++){
+        for(int j=0;j<imageHeight;j++){
             image.set_pixel(i,j,0, 0, 0);
         }
     }
+
+	double planeDistance = windowHeight/2/tan(radian(viewAngle/2));
+	Vector3D topLeft = eye + look*planeDistance - daan*windowWidth/2 + up*windowHeight/2;
+
+	//cout << "planeDistance = " << planeDistance << endl;
+	//cout << "topLeft = " << topLeft << endl;
+
+	double du = 1.0*windowWidth/imageWidth;
+	double dv = 1.0*windowHeight/imageHeight;
+
+	topLeft = topLeft + daan*(0.5*du) - up*(0.5*dv);
+
+	for(int i = 1; i <= imageWidth; i++)
+	{
+		for(int j = 1; j <= imageHeight; j++)
+		{
+			int nearest = -1;
+			double tmin = INF;
+
+			Vector3D curPixel = topLeft + daan*(i-1)*du - up*(j-1)*dv;
+			Ray ray(eye, curPixel-eye);
+			double *color = new double[3];
+
+			for(int k = 0; k < objects.size(); k++)
+			{
+				Object* o = objects[k];
+
+				double t = o->intersect(ray, color, 0);
+				if(t > 0 && t < tmin) tmin = t, nearest = k;
+			}
+
+			if(nearest != -1)
+			{
+				double t = objects[nearest]->intersect(ray, color, 1); // will change the level
+				for(int i = 0; i < 3; i++) if(color[i] > 1) color[i] = 1;
+
+				image.set_pixel(i, j, round(color[0]*255), round(color[1]*255), round(color[2]*255));
+			}
+		}
+	}
+
+	
 
 	image.save_image("output.bmp");
 }
@@ -135,8 +185,6 @@ void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of th
 	}
 }
 
-
-
 void display(){
 
 	//clear the display
@@ -209,7 +257,7 @@ void init(){
 	glLoadIdentity();
 
 	//give PERSPECTIVE parameters
-	gluPerspective(80,	1,	1,	1000.0);
+	gluPerspective(viewAngle,	aspect,	1,	1000.0);
 	//field of view in the Y (vertically)
 	//aspect ratio that determines the field of view in the X direction (horizontally)
 	//near distance
@@ -220,8 +268,8 @@ void loadData()
 {
 	ifstream fin("scene.txt");
 
-	fin >> recursionLevel >> windowHeight;
-	windowWidth = windowHeight;
+	fin >> recursionLevel >> imageHeight;
+	imageWidth = imageHeight;
 
 	int n;
 	fin >> n;
@@ -255,8 +303,6 @@ void loadData()
 	int m;
 	fin >> m;
 
-	cout << m << endl;
-
 	for(int i = 0; i < m; i++)
 	{
 		Light *l = new Light();
@@ -266,7 +312,7 @@ void loadData()
 	}
 
 	Object* floor = new Floor(500, 20);
-	objects.push_back(floor);
+	//objects.push_back(floor);
 }
 
 int main(int argc, char **argv){

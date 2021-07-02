@@ -6,6 +6,8 @@
 using namespace std;
 
 const double PI = acos(-1);
+const double EPS = 1e-5;
+const double INF = 1e18;
 const int SPHERE_STACKS = 50; // sphere stacks
 const int SPHERE_SLICES = 50; // sphere slices
 const int FLOOR_POINTS = 100;

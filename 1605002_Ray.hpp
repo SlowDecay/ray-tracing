@@ -5,13 +5,11 @@
 #include <GL/glut.h>
 #include <windows.h>
 
-#include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
-#include "1605002_Globals.hpp"
 
 using namespace std;
 
-class Ray : public Object
+class Ray
 {
 public:
     Vector3D start;
@@ -23,5 +21,11 @@ public:
         this->dir = dir.normalize();
     }
 };
+
+ostream &operator<<(ostream &dout, const Ray &rhs)
+{
+    dout << "(" << rhs.start << ", " << rhs.dir << ")";
+    return dout;
+}
 
 #endif
