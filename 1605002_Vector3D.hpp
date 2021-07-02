@@ -1,6 +1,8 @@
 #ifndef VECTOR3D
 #define VECTOR3D
 
+class Vector3D;
+
 #include <bits/stdc++.h>
 using namespace std;
 

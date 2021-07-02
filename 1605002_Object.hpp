@@ -7,11 +7,12 @@ using namespace std;
 class Object
 {
 protected:
-    double color[3];
+    
     double coEfficients[4];
     int shine;
 
 public:
+double color[3];
     virtual void draw() = 0;
 
     void setColor(double color[])

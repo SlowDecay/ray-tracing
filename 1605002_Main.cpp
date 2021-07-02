@@ -2,17 +2,21 @@
 #include <GL/glut.h>
 #include <windows.h>
 
-#include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
+#include "1605002_Object.hpp"
 #include "1605002_Sphere.hpp"
 #include "1605002_Triangle.hpp"
 #include "1605002_General.hpp"
 #include "1605002_Constants.hpp"
+#include "1605002_Globals.hpp"
 #include "1605002_Light.hpp"
 #include "1605002_Floor.hpp"
+#include "1605002_Bitmap_Image.hpp"
 
 using namespace std;
 
+// Global variables
+Vector3D eye, up, daan, look; // Camera vectors
 vector<Object*> objects;
 vector<Light*> lights;
 int recursionLevel;
@@ -30,8 +34,18 @@ void ghurao(const Vector3D& base, Vector3D& fst, Vector3D& scn, double kon)
     scn = ascn*cos(kon)+afst*sin(kon);
 }
 
-// Global Variables declaration
-Vector3D eye, up, daan, look; // Camera vectors
+void capture()
+{
+	bitmap_image image(windowWidth,windowHeight);
+
+	for(int i=0;i<windowWidth;i++){
+        for(int j=0;j<windowHeight;j++){
+            image.set_pixel(i,j,0, 0, 0);
+        }
+    }
+
+	image.save_image("output.bmp");
+}
 
 void drawAxes()
 {
@@ -51,6 +65,10 @@ void drawAxes()
 
 void keyboardListener(unsigned char key, int x,int y){
 	switch(key){
+		case '0':
+			capture();
+			break;
+
 		case '1':
 			ghurao(up, look, daan, RD);
 			break;
@@ -252,16 +270,16 @@ void loadData()
 }
 
 int main(int argc, char **argv){
+	loadData(); // loading data from input
+
 	glutInit(&argc,argv);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(windowHeight, windowWidth);
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);	//Depth, Double buffer, RGB color
 
 	glutCreateWindow("Ray Tracing");
 
-	init();
-
-	loadData(); // loading data from input
+	init();	
 
 	glEnable(GL_DEPTH_TEST);	//enable Depth Testing
 

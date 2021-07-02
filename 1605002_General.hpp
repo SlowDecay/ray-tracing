@@ -1,12 +1,15 @@
 #ifndef GENERAL
 #define GENERAL
 
+class General;
+
 #include <bits/stdc++.h>
 #include <GL/glut.h>
 #include <windows.h>
 
 #include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
+#include "1605002_Globals.hpp"
 
 using namespace std;
 

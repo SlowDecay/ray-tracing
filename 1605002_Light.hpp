@@ -1,6 +1,10 @@
 #ifndef LIGHT
 #define LIGHT
 
+class Light;
+
+#include "1605002_Vector3D.hpp"
+
 class Light
 {
 public:
@@ -16,9 +20,12 @@ public:
 
     void draw()
     {
-        Sphere s(lightPos, 1);
-        s.setColor(color);
-        s.draw();
+        glPointSize(5);
+        glBegin(GL_POINTS);
+            glColor3f(color[0], color[1], color[2]);
+            glVertex3f(lightPos.x(), lightPos.y(), lightPos.z());
+        glEnd();
+        glPointSize(1);
     }
 };
 
