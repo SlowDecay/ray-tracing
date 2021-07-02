@@ -77,7 +77,7 @@ void capture()
 			{
 				Object* o = objects[k];
 
-				double t = o->intersect(ray, color, 0);
+				double t = o->intersect(ray, color, 0, recursionLevel);
 				if(t > 0 && t < tmin) tmin = t, nearest = k;
 			}
 
@@ -85,7 +85,7 @@ void capture()
 			{
 				for(int i = 0; i < 3; i++) color[i] = 0;
 
-				double t = objects[nearest]->intersect(ray, color, 1); // will change the level
+				double t = objects[nearest]->intersect(ray, color, 1, recursionLevel); // will change the level
 				for(int i = 0; i < 3; i++) if(color[i] > 1) color[i] = 1;
 				image.set_pixel(i, j, round(color[0]*255), round(color[1]*255), round(color[2]*255));
 			}
@@ -241,15 +241,15 @@ void init(){
 
     //Initializing pos, up, daan and look
 
-    // eye = Vector3D(100, 100, 0);
-    // up = Vector3D(0, 0, 1);
-    // daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
-    // look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
+    eye = Vector3D(100, 100, 0);
+    up = Vector3D(0, 0, 1);
+    daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
+    look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
 
-	eye = Vector3D(0, 0, 200);
-    up = Vector3D(0, 1, 0);
-    daan = Vector3D(1, 0, 0);
-    look = Vector3D(0, 0, -1);
+	// eye = Vector3D(0, 0, 200);
+    // up = Vector3D(0, 1, 0);
+    // daan = Vector3D(1, 0, 0);
+    // look = Vector3D(0, 0, -1);
 
 
 	//clear the screen
@@ -315,7 +315,10 @@ void loadData()
 		fin >> *l;
 	}
 
-	//Object* floor = new Floor(500, 20);
+	Object* floor = new Floor(1000, 20);
+	double floorCoEff[] = {0.3, 0.3, 0.3, 0.3};
+	floor->setCoEfficients(floorCoEff);
+	floor->setShine(10);
 }
 
 int main(int argc, char **argv){

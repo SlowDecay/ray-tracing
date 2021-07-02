@@ -41,7 +41,7 @@ public:
     {
     }
 
-    double intersect(Ray ray, double *col, int level)
+    double intersect(Ray ray, double *col, int level, int maxLevel)
     {
         double t = getChed(ray);
         if (t < 0)
@@ -69,7 +69,7 @@ public:
 
             for (Object *o : Object::objects)
             {
-                double ot = o->intersect(incident, col, 0);
+                double ot = o->intersect(incident, col, 0, maxLevel);
                 if (ot > 0 && ot+EPS < selft)
                 {
                     shaded = true;
@@ -80,19 +80,40 @@ public:
             if (!shaded)
             {
                 double phongValue = max(0.0, (-ray.dir).dot(reflected.dir));
-                // if(phongValue > 0.9)
-                // {
-                //     cout << "eyeRay = " << ray << endl;
-                //     cout << "incident = " << incident << endl;
-                //     cout << "normal = " << normal << endl;
-                //     cout << "reflected = " << reflected << endl;
-                // }
 
                 for (int i = 0; i < 3; i++)
                 {
                     col[i] += l->color[i] * coEfficients[1] * max(0.0, (-incident.dir).dot(normal.dir)) * chedCol.coords[i];
                     col[i] += l->color[i] * coEfficients[2] * pow(phongValue, shine) * chedCol.coords[i];
                 }
+            }
+        }
+
+        if(level < maxLevel)
+        {
+            Ray reflected = Ray(intersectionPoint, ray.dir - 2 * ray.dir.dot(normal.dir) * normal.dir);
+            reflected.start += reflected.dir*EPS*1000;
+
+            int nearest = -1;
+            double tmin = INF;
+
+            for(int k = 0; k < Object::objects.size(); k++)
+            {
+                Object* o = objects[k];
+
+                double tn = o->intersect(reflected, col, 0, maxLevel);
+                if(tn > 0 && tn < tmin) tmin = tn, nearest = k;
+            }
+
+            if(nearest != -1)
+            {
+                double *colRef = new double[3];
+                for(int i = 0; i < 3; i++) colRef[i] = 0;
+
+                double tn = objects[nearest]->intersect(reflected, colRef, level+1, maxLevel);
+                for(int i = 0; i < 3; i++) col[i] += colRef[i]*coEfficients[3];
+
+                delete[] colRef;
             }
         }
 

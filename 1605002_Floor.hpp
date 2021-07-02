@@ -63,6 +63,35 @@ public:
             }
         }
     }
+
+    virtual double getChed(Ray ray)
+    {
+        if(fabs(ray.start.z()) < EPS) return -1;
+        if(fabs(ray.dir.z()) < EPS) return -1;
+
+        double t = -ray.start.z()/ray.dir.z();
+
+        if(t <= 0) return -1;
+
+        Vector3D ched = ray.start + t*ray.dir;
+        if(fabs(ched.x()) > floorWidth/2 || fabs(ched.y()) > floorWidth/2) return -1;
+
+        return t;
+    }
+
+    virtual Vector3D getColorAt(Vector3D point)
+    {
+        int i = (point.x()-bottomLeft.x())/tileWidth;
+        int j = (point.y()-bottomLeft.y())/tileWidth;
+
+        if((i+j)%2) return Vector3D(0, 0, 0);
+        else return Vector3D(1, 1, 1);
+    }
+
+    virtual Ray getNormal(Vector3D point)
+    {
+        return Ray(point, Vector3D(0, 0, 1));
+    }
 };
 
 #endif
