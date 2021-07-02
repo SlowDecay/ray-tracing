@@ -2,8 +2,10 @@
 #define OBJECT
 
 #include <bits/stdc++.h>
+
 #include "1605002_Vector3D.hpp"
 #include "1605002_Ray.hpp"
+#include "1605002_Light.hpp"
 
 using namespace std;
 
@@ -12,6 +14,13 @@ class Object
 protected:
 
 public:
+    Object()
+    {
+        objects.push_back(this);
+    }
+
+    static vector<Object*> objects;
+
     double color[3];
     double coEfficients[4];
     int shine;
@@ -35,7 +44,6 @@ public:
 
     double intersect(Ray ray, double* color, int level)
     {
-        //cout << ray << endl;
         double t = getChed(ray);
         if(t < 0) return -1;
 
@@ -45,6 +53,15 @@ public:
         Vector3D chedCol = getColorAt(intersectionPoint);
         for(int i = 0; i < 3; i++) color[i] = chedCol.coords[i]*coEfficients[0];
         Ray normal = getNormal(intersectionPoint);
+
+        for(Light* l: Light::lights)
+        {
+            bool shaded = false;
+            for(Object* o: Object::objects)
+            {
+                
+            }
+        }
 
         return t;
     }
@@ -59,5 +76,7 @@ public:
     }
     void setShine(int shine) { this->shine = shine; }
 };
+
+vector<Object*> Object::objects = vector<Object*>();
 
 #endif

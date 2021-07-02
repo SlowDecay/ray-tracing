@@ -11,11 +11,15 @@ public:
     Vector3D lightPos;
     double color[3];
 
-    Light() {}
+    static vector<Light*> lights;
+
+    Light() { lights.push_back(this); }
     Light(Vector3D lightPos, double color[])
     {
         this->lightPos = lightPos;
         for(int i = 0; i < 3; i++) this->color[i] = color[i];
+
+        lights.push_back(this);
     }
 
     void draw()
@@ -36,5 +40,7 @@ istream& operator>>(istream& din, Light& l)
 
     return din;
 }
+
+vector<Light*> Light::lights = vector<Light*>();
 
 #endif

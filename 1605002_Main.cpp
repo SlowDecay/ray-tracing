@@ -18,8 +18,8 @@ using namespace std;
 
 // Global variables
 Vector3D eye, up, daan, look; // Camera vectors
-vector<Object*> objects;
-vector<Light*> lights;
+vector<Object*> &objects = Object::objects;
+vector<Light*> &lights = Light::lights;
 int recursionLevel;
 int windowHeight = 500;
 int windowWidth = 500;
@@ -54,9 +54,6 @@ void capture()
 
 	double planeDistance = windowHeight/2/tan(radian(viewAngle/2));
 	Vector3D topLeft = eye + look*planeDistance - daan*windowWidth/2 + up*windowHeight/2;
-
-	//cout << "planeDistance = " << planeDistance << endl;
-	//cout << "topLeft = " << topLeft << endl;
 
 	double du = 1.0*windowWidth/imageWidth;
 	double dv = 1.0*windowHeight/imageHeight;
