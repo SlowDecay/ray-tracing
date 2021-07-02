@@ -60,6 +60,8 @@ void capture()
 
 	topLeft = topLeft + daan*(0.5*du) - up*(0.5*dv);
 
+	//for(Light* l: Light::lights) cout << *l << endl;
+
 	for(int i = 1; i <= imageWidth; i++)
 	{
 		for(int j = 1; j <= imageHeight; j++)
@@ -81,11 +83,14 @@ void capture()
 
 			if(nearest != -1)
 			{
+				for(int i = 0; i < 3; i++) color[i] = 0;
+
 				double t = objects[nearest]->intersect(ray, color, 1); // will change the level
 				for(int i = 0; i < 3; i++) if(color[i] > 1) color[i] = 1;
-
 				image.set_pixel(i, j, round(color[0]*255), round(color[1]*255), round(color[2]*255));
 			}
+
+			delete[] color;
 		}
 	}
 
@@ -235,10 +240,16 @@ void init(){
 	//codes for initialization
 
     //Initializing pos, up, daan and look
-    eye = Vector3D(100, 100, 0);
-    up = Vector3D(0, 0, 1);
-    daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
-    look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
+
+    // eye = Vector3D(100, 100, 0);
+    // up = Vector3D(0, 0, 1);
+    // daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
+    // look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
+
+	eye = Vector3D(0, 0, 200);
+    up = Vector3D(0, 1, 0);
+    daan = Vector3D(1, 0, 0);
+    look = Vector3D(0, 0, -1);
 
 
 	//clear the screen
@@ -293,8 +304,6 @@ void loadData()
 			o = new General();
 			fin >> *((General*)o);
 		}
-
-		objects.push_back(o);
 	}
 
 	int m;
@@ -304,12 +313,9 @@ void loadData()
 	{
 		Light *l = new Light();
 		fin >> *l;
-
-		lights.push_back(l);
 	}
 
-	Object* floor = new Floor(500, 20);
-	//objects.push_back(floor);
+	//Object* floor = new Floor(500, 20);
 }
 
 int main(int argc, char **argv){

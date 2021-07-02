@@ -44,6 +44,15 @@ public:
         return Vector3D(tmp[0], tmp[1], tmp[2]);
     }
 
+    Vector3D operator-() const
+    {
+        double tmp[3];
+        for (int i = 0; i < 3; i++)
+            tmp[i] = -coords[i];
+
+        return Vector3D(tmp[0], tmp[1], tmp[2]);
+    }
+
     Vector3D operator+=(const Vector3D &rhs)
     {
         for (int i = 0; i < 3; i++)
@@ -96,6 +105,11 @@ public:
         tmp[2] = coords[0] * rhs.coords[1] - coords[1] * rhs.coords[0];
 
         return Vector3D(tmp[0], tmp[1], tmp[2]);
+    }
+
+    double getLength() const
+    {
+        return sqrt(this->dot(*this));
     }
 
     Vector3D &normalize()

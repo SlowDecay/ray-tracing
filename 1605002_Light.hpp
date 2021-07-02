@@ -33,6 +33,12 @@ public:
     }
 };
 
+ostream& operator<<(ostream& dout, const Light& l)
+{
+    dout << l.lightPos << ", (" << l.color[0] << ", " << l.color[1] << ", " << l.color[2] << ")";
+    return dout;
+}
+
 istream& operator>>(istream& din, Light& l)
 {
     din >> l.lightPos;
