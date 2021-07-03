@@ -25,6 +25,11 @@ public:
     double coEfficients[4];
     int shine;
 
+    virtual string getType()
+    {
+        return "object";
+    }
+
     virtual void draw() = 0;
 
     virtual double getChed(Ray ray)
@@ -37,7 +42,7 @@ public:
         return Vector3D(this->color[0], this->color[1], this->color[2]);
     }
 
-    virtual Ray getNormal(Vector3D point)
+    virtual Ray getNormal(Vector3D point, Ray incident)
     {
     }
 
@@ -53,13 +58,13 @@ public:
         Vector3D intersectionPoint = Vector3D(ray.start + t * ray.dir);
         Vector3D chedCol = getColorAt(intersectionPoint);
         for (int i = 0; i < 3; i++)
-            col[i] += chedCol.coords[i] * coEfficients[0];
-        Ray normal = getNormal(intersectionPoint);
+            col[i] += chedCol.coords[i] * coEfficients[0]; // ambient
 
         for (Light *l : Light::lights)
         {
             bool shaded = false;
             Ray incident = Ray(l->lightPos, intersectionPoint - (l->lightPos));
+            Ray normal = getNormal(intersectionPoint, incident);
             Ray reflected = Ray(intersectionPoint, incident.dir - 2 * incident.dir.dot(normal.dir) * normal.dir);
             
             double selft = (intersectionPoint - (l->lightPos)).getLength();
@@ -84,15 +89,19 @@ public:
                 for (int i = 0; i < 3; i++)
                 {
                     col[i] += l->color[i] * coEfficients[1] * max(0.0, (-incident.dir).dot(normal.dir)) * chedCol.coords[i];
-                    col[i] += l->color[i] * coEfficients[2] * pow(phongValue, shine) * chedCol.coords[i];
+                    col[i] += l->color[i] * coEfficients[2] * pow(phongValue, shine);// * chedCol.coords[i];
                 }
             }
         }
 
+        // recursive reflection (doesn't work :'( => works now )
         if(level < maxLevel)
         {
+            Ray normal = getNormal(intersectionPoint, ray);
             Ray reflected = Ray(intersectionPoint, ray.dir - 2 * ray.dir.dot(normal.dir) * normal.dir);
-            reflected.start += reflected.dir*EPS*1000;
+            reflected.start += reflected.dir*EPS;
+
+            //if(getType() == "floor") cout << "reflected = " << reflected << endl;
 
             int nearest = -1;
             double tmin = INF;
@@ -113,6 +122,12 @@ public:
                 double tn = objects[nearest]->intersect(reflected, colRef, level+1, maxLevel);
                 for(int i = 0; i < 3; i++) col[i] += colRef[i]*coEfficients[3];
 
+                if(getType() == "floor")
+                {
+                    // cout << "paise" << endl;
+                    // cout << colRef[0] << " " << colRef[1] << " " << colRef[2] << endl;
+                }
+
                 delete[] colRef;
             }
         }
@@ -127,10 +142,12 @@ public:
     }
     void setCoEfficients(double coEfficients[])
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
             this->coEfficients[i] = coEfficients[i];
     }
     void setShine(int shine) { this->shine = shine; }
+
+    virtual void chapao() = 0;
 };
 
 vector<Object *> Object::objects = vector<Object *>();

@@ -41,6 +41,11 @@ public:
         }
     }
 
+    virtual string getType()
+    {
+        return "floor";
+    }
+
     virtual void draw()
     {
         int n = round(floorWidth/tileWidth);
@@ -51,7 +56,7 @@ public:
             {
                 glBegin(GL_QUADS);
                 {
-                    if((i+j)%2) glColor3f(0, 0, 0);
+                    if((i+j)%2 == 0) glColor3f(0, 0, 0);
                     else glColor3f(255, 255, 255);
 
                     glVertex3f(floorPoints[i][j].x(), floorPoints[i][j].y(), floorPoints[i][j].z());
@@ -84,13 +89,24 @@ public:
         int i = (point.x()-bottomLeft.x())/tileWidth;
         int j = (point.y()-bottomLeft.y())/tileWidth;
 
-        if((i+j)%2) return Vector3D(0, 0, 0);
+        if((i+j)%2 == 0) return Vector3D(0, 0, 0);
         else return Vector3D(1, 1, 1);
     }
 
-    virtual Ray getNormal(Vector3D point)
+    virtual Ray getNormal(Vector3D point, Ray incident)
     {
-        return Ray(point, Vector3D(0, 0, 1));
+        if(incident.start.z() > 0) return Ray(point, Vector3D(0, 0, 1));
+        else return Ray(point, Vector3D(0, 0, -1));
+    }
+
+    virtual void chapao()
+    {
+        cout << "floor" << endl;
+        cout << "floorwidth = " << floorWidth << endl;
+        cout << "radius = " << tileWidth << endl;
+        cout << "colors = " << color[0] << " " << color[1] << " " << color[2] << endl;
+        cout << "coEffs = " << coEfficients[0] << " " << coEfficients[1] << " " << coEfficients[2] << " " << coEfficients[3] << endl;
+        cout << "shine = " << shine << endl << endl;
     }
 };
 

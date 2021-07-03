@@ -87,14 +87,13 @@ void capture()
 
 				double t = objects[nearest]->intersect(ray, color, 1, recursionLevel); // will change the level
 				for(int i = 0; i < 3; i++) if(color[i] > 1) color[i] = 1;
+				for(int i = 0; i < 3; i++) if(color[i] < 0) color[i] = 0;
 				image.set_pixel(i, j, round(color[0]*255), round(color[1]*255), round(color[2]*255));
 			}
 
 			delete[] color;
 		}
 	}
-
-	
 
 	image.save_image("output.bmp");
 }
@@ -241,15 +240,15 @@ void init(){
 
     //Initializing pos, up, daan and look
 
-    eye = Vector3D(100, 100, 0);
-    up = Vector3D(0, 0, 1);
-    daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
-    look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
+    // eye = Vector3D(100, 100, 0);
+    // up = Vector3D(0, 0, 1);
+    // daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
+    // look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
 
-	// eye = Vector3D(0, 0, 200);
-    // up = Vector3D(0, 1, 0);
-    // daan = Vector3D(1, 0, 0);
-    // look = Vector3D(0, 0, -1);
+	eye = Vector3D(0, 0, 200);
+    up = Vector3D(0, 1, 0);
+    daan = Vector3D(1, 0, 0);
+    look = Vector3D(0, 0, -1);
 
 
 	//clear the screen
@@ -316,9 +315,11 @@ void loadData()
 	}
 
 	Object* floor = new Floor(1000, 20);
-	double floorCoEff[] = {0.3, 0.3, 0.3, 0.3};
+	double floorCoEff[] = {0.2, 0.2, 0.2, 0.2};
 	floor->setCoEfficients(floorCoEff);
-	floor->setShine(10);
+	floor->setShine(1);
+
+	//for(Object* o: Object::objects) o->chapao();
 }
 
 int main(int argc, char **argv){

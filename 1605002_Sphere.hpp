@@ -86,9 +86,19 @@ public:
         return getSol(a, b, c);
     }
 
-    virtual Ray getNormal(Vector3D point)
+    virtual Ray getNormal(Vector3D point, Ray incident)
     {
         return Ray(point, point-center);
+    }
+
+    virtual void chapao()
+    {
+        cout << "sphere" << endl;
+        cout << "center = " << center << endl;
+        cout << "radius = " << radius << endl;
+        cout << "colors = " << color[0] << " " << color[1] << " " << color[2] << endl;
+        cout << "coEffs = " << coEfficients[0] << " " << coEfficients[1] << " " << coEfficients[2] << " " << coEfficients[3] << endl;
+        cout << "shine = " << shine << endl << endl;
     }
 
     friend istream& operator>>(istream&, Sphere&);

@@ -27,6 +27,11 @@ public:
         return;
     }
 
+    virtual void chapao()
+    {
+        cout << "pari na " << endl << endl;
+    }
+
     friend istream& operator>>(istream&, General&);
 };
 

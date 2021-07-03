@@ -117,10 +117,10 @@ public:
         double d = 0;
         for (int i = 0; i < 3; i++)
             d += coords[i] * coords[i];
-        d = sqrt(d);
 
-        if (d > 0)
+        if (fabs(d) > EPS)
         {
+            d = sqrt(d);
             for (int i = 0; i < 3; i++)
                 coords[i] /= d;
         }
