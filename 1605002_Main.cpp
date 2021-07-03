@@ -83,6 +83,8 @@ void capture()
 
 			if(nearest != -1)
 			{
+				//if(objects[nearest]->getType() == "general") cout << "hemlo" << endl;
+
 				for(int i = 0; i < 3; i++) color[i] = 0;
 
 				double t = objects[nearest]->intersect(ray, color, 1, recursionLevel); // will change the level

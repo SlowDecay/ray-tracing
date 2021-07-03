@@ -83,7 +83,8 @@ public:
         double b = 2*ray.start.dot(ray.dir);
         double c = ray.start.dot(ray.start)-radius*radius;
 
-        return getSol(a, b, c);
+        double t1, t2;
+        return getSol(a, b, c, t1, t2);
     }
 
     virtual Ray getNormal(Vector3D point, Ray incident)
