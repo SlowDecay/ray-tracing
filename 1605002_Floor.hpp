@@ -8,6 +8,7 @@
 #include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
 #include "1605002_Constants.hpp"
+#include "1605002_Bitmap_Image.hpp"
 
 using namespace std;
 
@@ -18,9 +19,10 @@ struct Floor : public Object
 private:
     Vector3D bottomLeft;
     double floorWidth, tileWidth;
+    bitmap_image image;
 
 public:
-    Floor(double floorWidth, double tileWidth)
+    Floor(double floorWidth, double tileWidth): image("1605002_biis.bmp")
     {
         bottomLeft = Vector3D(-floorWidth / 2, -floorWidth / 2, 0);
         this->floorWidth = floorWidth, this->tileWidth = tileWidth;
@@ -89,7 +91,29 @@ public:
         int i = (point.x()-bottomLeft.x())/tileWidth;
         int j = (point.y()-bottomLeft.y())/tileWidth;
 
-        if((i+j)%2 == 0) return Vector3D(0, 0, 0);
+        if((i+j)%2 == 0)
+        {
+            double tilex = bottomLeft.x() + i *tileWidth;
+            double tiley = bottomLeft.y() + j *tileWidth;
+
+            int imageWidth = image.width();
+            int imageHeight = image.height();
+
+            int pixelx = round((point.x()-tilex)/tileWidth*imageWidth);
+            int pixely = round((point.y()-tiley)/tileWidth*imageHeight);
+
+            if(pixelx < 1) pixelx = 1;
+            if(pixelx > imageWidth) pixelx = imageWidth;
+
+            if(pixely < 1) pixely = 1;
+            if(pixely > imageHeight) pixely = imageHeight;
+
+            unsigned char r, g, b;
+            image.get_pixel(pixelx, pixely, r, g, b);
+
+            Vector3D col(r/255.0, g/255.0, b/255.0);
+            return col*TEX_COEFF;
+        }
         else return Vector3D(1, 1, 1);
     }
 
