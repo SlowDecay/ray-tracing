@@ -1,8 +1,6 @@
 #ifndef SPHERE
 #define SPHERE
 
-class Sphere;
-
 #include <bits/stdc++.h>
 #include <GL/glut.h>
 #include <windows.h>
@@ -20,7 +18,7 @@ class Sphere : public Object
 {
 public:
     Vector3D center;
-    double radius;  
+    double radius;
 
     void drawRing()
     {
@@ -67,20 +65,20 @@ public:
     virtual void draw()
     {
         glPushMatrix();
-            glTranslatef(center.coords[0], center.coords[1], center.coords[2]);
-            glColor3f(color[0], color[1], color[2]);
-            drawHalfSphere(1);
-            drawHalfSphere(-1);
+        glTranslatef(center.coords[0], center.coords[1], center.coords[2]);
+        glColor3f(color[0], color[1], color[2]);
+        drawHalfSphere(1);
+        drawHalfSphere(-1);
         glPopMatrix();
     }
 
     virtual double getChed(Ray ray)
     {
         ray.start -= center;
-        
+
         double a = 1;
-        double b = 2*ray.start.dot(ray.dir);
-        double c = ray.start.dot(ray.start)-radius*radius;
+        double b = 2 * ray.start.dot(ray.dir);
+        double c = ray.start.dot(ray.start) - radius * radius;
 
         double t1, t2;
         return getSol(a, b, c, t1, t2);
@@ -88,7 +86,7 @@ public:
 
     virtual Ray getNormal(Vector3D point, Ray incident)
     {
-        return Ray(point, point-center);
+        return Ray(point, point - center);
     }
 
     virtual void chapao()
@@ -98,17 +96,20 @@ public:
         cout << "radius = " << radius << endl;
         cout << "colors = " << color[0] << " " << color[1] << " " << color[2] << endl;
         cout << "coEffs = " << coEfficients[0] << " " << coEfficients[1] << " " << coEfficients[2] << " " << coEfficients[3] << endl;
-        cout << "shine = " << shine << endl << endl;
+        cout << "shine = " << shine << endl
+             << endl;
     }
 
-    friend istream& operator>>(istream&, Sphere&);
+    friend istream &operator>>(istream &, Sphere &);
 };
 
-istream& operator>>(istream& din, Sphere& s)
+istream &operator>>(istream &din, Sphere &s)
 {
     din >> s.center >> s.radius;
-    for(int i = 0; i < 3; i++) din >> s.color[i];
-    for(int i = 0; i < 4; i++) din >> s.coEfficients[i];
+    for (int i = 0; i < 3; i++)
+        din >> s.color[i];
+    for (int i = 0; i < 4; i++)
+        din >> s.coEfficients[i];
     din >> s.shine;
 
     return din;

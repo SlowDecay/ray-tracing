@@ -32,10 +32,7 @@ public:
 
     virtual void draw() = 0;
 
-    virtual double getChed(Ray ray)
-    {
-        return -1;
-    }
+    virtual double getChed(Ray ray) = 0;
 
     virtual Vector3D getColorAt(Vector3D point)
     {
@@ -64,7 +61,7 @@ public:
             Ray incident = Ray(l->lightPos, intersectionPoint - (l->lightPos));
             Ray normal = getNormal(intersectionPoint, incident);
             Ray reflected = Ray(intersectionPoint, incident.dir - 2 * incident.dir.dot(normal.dir) * normal.dir);
-            
+
             double selft = (intersectionPoint - (l->lightPos)).getLength();
 
             if (selft < EPS)
@@ -73,7 +70,7 @@ public:
             for (Object *o : Object::objects)
             {
                 double ot = o->intersect(incident, col, 0, maxLevel);
-                if (ot > 0 && ot+EPS < selft)
+                if (ot > 0 && ot + EPS < selft)
                 {
                     shaded = true;
                     break;
@@ -87,40 +84,43 @@ public:
                 for (int i = 0; i < 3; i++)
                 {
                     col[i] += l->color[i] * coEfficients[1] * max(0.0, (-incident.dir).dot(normal.dir)) * chedCol.coords[i];
-                    col[i] += l->color[i] * coEfficients[2] * pow(phongValue, shine);// * chedCol.coords[i];
+                    col[i] += l->color[i] * coEfficients[2] * pow(phongValue, shine); // * chedCol.coords[i];
                 }
             }
         }
 
         // recursive reflection (doesn't work :'( => works now )
-        if(level < maxLevel)
+        if (level < maxLevel)
         {
             Ray normal = getNormal(intersectionPoint, ray);
             Ray reflected = Ray(intersectionPoint, ray.dir - 2 * ray.dir.dot(normal.dir) * normal.dir);
-            reflected.start += reflected.dir*EPS;
+            reflected.start += reflected.dir * EPS;
 
             //if(getType() == "floor") cout << "reflected = " << reflected << endl;
 
             int nearest = -1;
             double tmin = INF;
 
-            for(int k = 0; k < Object::objects.size(); k++)
+            for (int k = 0; k < Object::objects.size(); k++)
             {
-                Object* o = objects[k];
+                Object *o = objects[k];
 
                 double tn = o->intersect(reflected, col, 0, maxLevel);
-                if(tn > 0 && tn < tmin) tmin = tn, nearest = k;
+                if (tn > 0 && tn < tmin)
+                    tmin = tn, nearest = k;
             }
 
-            if(nearest != -1)
+            if (nearest != -1)
             {
                 double *colRef = new double[3];
-                for(int i = 0; i < 3; i++) colRef[i] = 0;
+                for (int i = 0; i < 3; i++)
+                    colRef[i] = 0;
 
-                double tn = objects[nearest]->intersect(reflected, colRef, level+1, maxLevel);
-                for(int i = 0; i < 3; i++) col[i] += colRef[i]*coEfficients[3];
+                double tn = objects[nearest]->intersect(reflected, colRef, level + 1, maxLevel);
+                for (int i = 0; i < 3; i++)
+                    col[i] += colRef[i] * coEfficients[3];
 
-                if(getType() == "floor")
+                if (getType() == "floor")
                 {
                     // cout << "paise" << endl;
                     // cout << colRef[0] << " " << colRef[1] << " " << colRef[2] << endl;

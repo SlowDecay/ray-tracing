@@ -1,8 +1,6 @@
 #ifndef GENERAL
 #define GENERAL
 
-class General;
-
 #include <bits/stdc++.h>
 #include <GL/glut.h>
 #include <windows.h>
