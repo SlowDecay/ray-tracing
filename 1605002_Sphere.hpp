@@ -10,7 +10,6 @@ class Sphere;
 #include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
 #include "1605002_Constants.hpp"
-#include "1605002_Globals.hpp"
 #include "1605002_Utils.hpp"
 
 using namespace std;

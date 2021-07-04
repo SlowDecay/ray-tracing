@@ -9,7 +9,6 @@ class Triangle;
 
 #include "1605002_Object.hpp"
 #include "1605002_Vector3D.hpp"
-#include "1605002_Globals.hpp"
 #include "1605002_Matrix.hpp"
 
 using namespace std;

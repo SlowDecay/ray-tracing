@@ -8,7 +8,6 @@
 #include "1605002_Triangle.hpp"
 #include "1605002_General.hpp"
 #include "1605002_Constants.hpp"
-#include "1605002_Globals.hpp"
 #include "1605002_Light.hpp"
 #include "1605002_Floor.hpp"
 #include "1605002_Bitmap_Image.hpp"
@@ -43,6 +42,8 @@ double radian(double angle) { return angle*PI/180; }
 
 void capture()
 {
+	cout << "capturing..." << endl;
+
 	// Initializing bitmap image
 	bitmap_image image(imageWidth,imageHeight);
 
@@ -98,6 +99,8 @@ void capture()
 	}
 
 	image.save_image("output.bmp");
+
+	cout << "captured" << endl;
 }
 
 void drawAxes()
@@ -242,15 +245,15 @@ void init(){
 
     //Initializing pos, up, daan and look
 
-    // eye = Vector3D(100, 100, 0);
-    // up = Vector3D(0, 0, 1);
-    // daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
-    // look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
+    eye = Vector3D(100, 100, 0);
+    up = Vector3D(0, 0, 1);
+    daan = Vector3D(-1/sqrt(2), 1/sqrt(2), 0);
+    look = Vector3D(-1/sqrt(2), -1/sqrt(2), 0);
 
-	eye = Vector3D(0, 0, 200);
-    up = Vector3D(0, 1, 0);
-    daan = Vector3D(1, 0, 0);
-    look = Vector3D(0, 0, -1);
+	// eye = Vector3D(0, 0, 200);
+    // up = Vector3D(0, 1, 0);
+    // daan = Vector3D(1, 0, 0);
+    // look = Vector3D(0, 0, -1);
 
 
 	//clear the screen

@@ -42,9 +42,7 @@ public:
         return Vector3D(this->color[0], this->color[1], this->color[2]);
     }
 
-    virtual Ray getNormal(Vector3D point, Ray incident)
-    {
-    }
+    virtual Ray getNormal(Vector3D point, Ray incident) = 0;
 
     double intersect(Ray ray, double *col, int level, int maxLevel)
     {
